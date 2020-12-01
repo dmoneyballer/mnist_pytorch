@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
-# from fastbook import *
+
 log_interval=50
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
@@ -63,15 +63,7 @@ def test(model, device, test_loader):
 def mnist_loss(predictions, targets):
     predictions = predictions.sigmoid()
     return torch.where(targets==1, 1-predictions, predictions).mean()
-simple_net = nn.Sequential(
-    nn.Linear(28*28,256),
-    nn.ReLU(),
-    nn.Linear(256, 100),
-    nn.ReLU(),
-    nn.Linear(100, 30),
-    nn.ReLU(),
-    nn.Linear(30,10)
-).to(device)
+
 train_kwargs = {
     'batch_size': 64
 }
@@ -99,8 +91,8 @@ dataset2 = datasets.MNIST('../data', train=False,
 
 train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
 test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
-x = list(train_loader)[0][0]
-print(x.shape)
+# x = list(train_loader)[0][0]
+# print(x.shape)
 model = Net().to(device)
 optimizer = optim.Adadelta(model.parameters(), lr=1)
 scheduler = StepLR(optimizer, step_size=1)
